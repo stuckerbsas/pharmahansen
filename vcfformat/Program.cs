@@ -241,7 +241,7 @@ namespace vcfformat
                                     }
                                     if (posicion == 117559590)
                                     {
-                                        escribirLinea(line,true,"rs121908745", "ATCT", "A");
+                                        escribirLinea(line,true, "rs199826652", "ATCT", "A");
                                         flag = false;
                                     }
                                     if (posicion == 117559591)
