@@ -205,102 +205,116 @@ namespace vcfformat
                             switch (lineaaux[0])
                             {
                                 case "chr1":
-                                    if (posicion == 97450065)
+                                    if (lineaaux[9].Split(':')[0] == "0/0")
                                     {
-                                        escribirLinea(line, true, "rs72549303", "TG", "T");
-                                        flag = false;
-                                    }
-                                    if (posicion == 97740414)
-                                    {
-                                        escribirLinea(line, true, "rs72549309", "AAGTA", "A");
-                                        flag = false;
+                                        if (posicion == 97450065)
+                                        {
+                                            escribirLinea(line, true, "rs72549303", "TG", "T");
+                                            flag = false;
+                                        }
+                                        if (posicion == 97740414)
+                                        {
+                                            escribirLinea(line, true, "rs72549309", "AAGTA", "A");
+                                            flag = false;
+                                        }
                                     }
                                     if (flag)
                                         escribirLinea(line, false, "", "", "");
                                     break;
                                 case "chr2":
-                                    if (posicion == 233760233)
+                                    if (lineaaux[9].Split(':')[0] == "0/0")
                                     {
-                                        escribirLinea(line, true, ".", "CAT", "CATAT,C,CATATAT");
-                                        flag = false;
+                                        if (posicion == 233760233)
+                                        {
+                                            escribirLinea(line, true, ".", "CAT", "CATAT,C,CATATAT");
+                                            flag = false;
+                                        }
                                     }
-
                                     if (flag)
                                         escribirLinea(line, false, "", "", "");
                                     break;
                                 case "chr7":
-                                    if (posicion == 99652770)
+                                    if (lineaaux[9].Split(':')[0] == "0/0")
                                     {
-                                        escribirLinea(line, true, "rs41303343", "T", "TA");
-                                        flag = false;
-                                    }
-                                    if (posicion == 117559589)
-                                    {
-                                        escribirLinea(line, true, "rs121908745", "CATC", "C");
-                                        flag = false;
-                                    }
-                                    if (posicion == 117559590)
-                                    {
-                                        escribirLinea(line,true, "rs199826652", "ATCT", "A");
-                                        flag = false;
-                                    }
-                                    if (posicion == 117559591)
-                                    {
-                                        escribirLinea(line, true, "rs113993960", "TCTT", "T");
-                                        flag = false;
-                                    }
-                                    if (posicion == 117592218)
-                                    {
-                                        escribirLinea(line, true, "rs121908746", "AA", "A");
-                                        flag = false;
-                                    }
-                                    if (posicion == 117627580)
-                                    {
-                                        escribirLinea(line, true, "rs121908747", "CC", "C");
-                                        flag = false;
+                                        if (posicion == 99652770)
+                                        {
+                                            escribirLinea(line, true, "rs41303343", "T", "TA");
+                                            flag = false;
+                                        }
+                                        if (posicion == 117559589)
+                                        {
+                                            escribirLinea(line, true, "rs121908745", "CATC", "C");
+                                            flag = false;
+                                        }
+                                        if (posicion == 117559590)
+                                        {
+                                            escribirLinea(line, true, "rs199826652", "ATCT", "A");
+                                            flag = false;
+                                        }
+                                        if (posicion == 117559591)
+                                        {
+                                            escribirLinea(line, true, "rs113993960", "TCTT", "T");
+                                            flag = false;
+                                        }
+                                        if (posicion == 117592218)
+                                        {
+                                            escribirLinea(line, true, "rs121908746", "AA", "A");
+                                            flag = false;
+                                        }
+                                        if (posicion == 117627580)
+                                        {
+                                            escribirLinea(line, true, "rs121908747", "CC", "C");
+                                            flag = false;
+                                        }
                                     }
                                     if (flag)
                                         escribirLinea(line, false, "", "", "");
                                     break;
                                 case "chr10":
-                                    if (posicion == 94942212)
+                                    if (lineaaux[9].Split(':')[0] == "0/0")
                                     {
-                                        escribirLinea(line, true, ".", "AAGAAATGGAA", "A");
-                                        flag = false;
-                                    }
-                                    if (posicion == 94949281)
-                                    {
-                                        escribirLinea(line, true, "rs9332131", "GA", "G");
-                                        flag = false;
+                                        if (posicion == 94942212)
+                                        {
+                                            escribirLinea(line, true, ".", "AAGAAATGGAA", "A");
+                                            flag = false;
+                                        }
+                                        if (posicion == 94949281)
+                                        {
+                                            escribirLinea(line, true, "rs9332131", "GA", "G");
+                                            flag = false;
+                                        }
                                     }
                                     if (flag)
                                         escribirLinea(line, false, "", "", "");
                                     break;
                                 case "chr13":
-                                    if (posicion == 48037782)
+                                    if (lineaaux[9].Split(':')[0] == "0/0")
                                     {
-                                        escribirLinea(line, true, "rs746071566", "AGGAGTC", "A");
-                                        flag = false;
-                                    }
-                                    if (posicion == 48037801)
-                                    {
-                                        escribirLinea(line, true, "rs869320766", "G", "GGAGTCG");
-                                        flag = false;
-                                    }
-                                    if (posicion == 48037826)
-                                    {
-                                        escribirLinea(line, true, "rs777311140", "G", "GCGGG");
-                                        flag = false;
-                                    }
-                                    if (posicion == 48040981)
-                                    {
-                                        escribirLinea(line, true, "rs1457579126", "AA", "A");
-                                        flag = false;
-                                    }
-                                    if (posicion == 48041103)
-                                    {
-                                        escribirLinea(line, true, "rs761191455", "T", "TG");
-                                        flag = false;
+                                        if (posicion == 48037782)
+                                        {
+                                            escribirLinea(line, true, "rs746071566", "AGGAGTC", "A");
+                                            flag = false;
+                                        }
+                                        if (posicion == 48037801)
+                                        {
+                                            escribirLinea(line, true, "rs869320766", "G", "GGAGTCG");
+                                            flag = false;
+                                        }
+                                        if (posicion == 48037826)
+                                        {
+                                            escribirLinea(line, true, "rs777311140", "G", "GCGGG");
+                                            flag = false;
+                                        }
+                                        if (posicion == 48040981)
+                                        {
+                                            escribirLinea(line, true, "rs1457579126", "AA", "A");
+                                            flag = false;
+                                        }
+                                        if (posicion == 48041103)
+                                        {
+                                            escribirLinea(line, true, "rs761191455", "T", "TG");
+                                            flag = false;
+                                        }
                                     }
                                     if (flag)
                                         escribirLinea(line, false, "", "", "");
