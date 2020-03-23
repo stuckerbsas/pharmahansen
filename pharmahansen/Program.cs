@@ -30,7 +30,7 @@ namespace pharmahansen
         static List<Indice> indices = new List<Indice>();
         private static System.Timers.Timer aTimer;
         static long anterior = 0;
-        static int PosicionS = 0;
+        static Int64 PosicionS = 0;
         static int procesadas = 0;
         static int totales = 0;
         enum Tipo{
@@ -41,10 +41,29 @@ namespace pharmahansen
             Nada
         }
 
-       
+        static void ingresarListado(string[] array)
+        {
+           
+            var charArray = array.SelectMany(x => x.ToCharArray());
+            
+            string linea = array[chequeoArray(array)];
+
+            string[] aux = linea.Split('\t');
+            Indice ind = new Indice();
+            ind.chr = aux[0];
+            ind.PosicionStart = PosicionS;
+            ind.PosicionEnd = int.Parse(aux[1]);
+            ind.start = anterior;
+            ind.End = anterior + Buffer.ByteLength(charArray.ToArray());
+            anterior += Buffer.ByteLength(charArray.ToArray());
+            indices.Add(ind);
+            PosicionS = int.Parse(aux[1]);
+            
+        }
         private static void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            Console.Write("\rLlevamos vamos por el chr {0}:{1} en {2}", indices.Last().chr, indices.Last().PosicionEnd, stopWatch.Elapsed);
+            if(indices.Count > 0)
+            Console.Write("\rLlevamos vamos por el chr {0}:{1} en {2}", indices.Last().chr, String.Format("{0:n0}", indices.Last().PosicionEnd) , stopWatch.Elapsed);
         }
         public static String GetTimestamp(DateTime value)
         {
@@ -119,7 +138,16 @@ namespace pharmahansen
         {
             return args[Array.IndexOf(args, Argumento) + 1];
         }
-
+        static int chequeoArray(string[] array)
+        {
+            int indice = 0;
+            for(int x= 0; x<array.Length; x++)
+            {
+                if (array[x] != null)
+                    indice = x;
+            }
+            return indice;
+        }
        
         static void Main(string[] args)
         {
@@ -169,7 +197,7 @@ namespace pharmahansen
             EscribirLog("Demoramos " + stopWatch.Elapsed, Tipo.Informativo, true);
             
             Dictionary<long, String> test = new Dictionary<long, string>();
-           /* List<Indice> salida = new List<Indice>();
+            /*List<Indice> salida = new List<Indice>();
             using (Stream stream = File.Open("data.bin", FileMode.Open))
             {
                 BinaryFormatter bin = new BinaryFormatter();
@@ -180,25 +208,33 @@ namespace pharmahansen
             Console.WriteLine(salida.Where(s => s.chr == "1").Count());
             Console.WriteLine(salida.Where(s => s.chr == "1" && s.End > 100000 && s.start < 99500).Count());
             IEnumerable<Indice> in1d = salida.Where(s => s.chr == "1" && s.PosicionEnd >= 267356 && s.PosicionStart < 267356);
+            string[] arradd = new string[10];
 
-         
+            arradd[0] = "a";
+            arradd[1] = "a";
+            arradd[2] = "a";
+            arradd[3] = "a";
+            arradd[4] = "a";
+            arradd[5] = "a";
+            Console.WriteLine(arradd[arradd.Length - 1]);
 
-                Console.WriteLine(salida.Where(s => s.chr == "1" && s.PosicionEnd > 267357 && s.PosicionStart < 267355).Count());
 
+            Console.WriteLine(salida.Where(s => s.chr == "1" && s.PosicionEnd > 267357 && s.PosicionStart < 267355).Count());
 
+            
             int indie = Convert.ToInt32( in1d.First().End - in1d.First().start);
            // byte[] byteps = File.ReadAllBytes(@"C:\Datos\All_20180418.vcf");
          //   Console.WriteLine(byteps.Length);
            FileStream fs = new FileStream(@"C:\Datos\All_20180418.vcf", FileMode.Open);
             fs.Seek(in1d.First().start, SeekOrigin.Current);
             
-            byte[] buffer1 = new byte[indie];
-            fs.Read(buffer1, 0, indie);
+            byte[] buffer1 = new byte[1901077];
+            fs.Read(buffer1, 0, 1901077);
             //fs.Read(buffer1, in1d.First().start, indie);
             // fs.Seek(in1d.First().start, SeekOrigin.Begin);
             // fs.SetLength(indie);
             int contado = 0;
-            string[] ar = new string[2000];
+            string[] ar = new string[20000];
             int con = 0;
             string aux1 = string.Empty;
             int cona = 0;
@@ -215,6 +251,7 @@ namespace pharmahansen
                     cona++;
                 }
             }
+            fs.Close();
             /* for(long xi1 = in1d.First().start; xi1< in1d.First().End; xi1++)
              {
                  buffer1[contado] = byteps[xi1];
@@ -250,51 +287,190 @@ namespace pharmahansen
                     }
                 }
             }*/
+
+            using (FileStream fsr = new FileStream(@"C:\Datos\All_20180418.vcf", FileMode.Open, FileAccess.Read))
+            {
+                byte[] buffer1 = new byte[192126];
+                fsr.Read(buffer1, 0, 192126);
+                int contado = 0;
+                string[] ar = new string[20000];
+                int con = 0;
+                string aux1 = string.Empty;
+                int cona = 0;
+                for (int x = 0; x < buffer1.Length; x++)
+                {
+                    if (buffer1[x] != '\n')
+                    {
+                        aux1 += Convert.ToChar(buffer1[x]);
+                    }
+                    else
+                    {
+                        ar[cona] = aux1;
+                        aux1 = string.Empty;
+                        cona++;
+                    }
+                }
+             }
+
+
             aTimer = new System.Timers.Timer(6000);
             // Hook up the Elapsed event for the timer. 
             aTimer.Elapsed += OnTimedEvent;
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
-            string[] array = new string[1000];
+            string[] array = new string[10000];
             int contador = 0;
-            
+            int estimador = 0;
             Console.WriteLine("Metodo File");
             Stopwatch filee = new Stopwatch();
             filee.Start();
+
+            string auxs = string.Empty;
+            int cantB = 0;
+            int paginador = 0;
+            byte flag = 10;
+
+            using (FileStream fsb = new FileStream(@"C:\Datos\All_20180418.vcf",FileMode.Open, FileAccess.Read))
+            {
+                long length = 0;
+                int bufint = 100000;
+                while (length < fsb.Length)
+                {
+                    byte[] buffer = new byte[bufint];
+                    int b = fsb.Read(buffer, paginador * bufint, bufint);
+                    length += buffer.Length;
+                    if(buffer.Contains(flag))
+                    {
+                        for (int x = 0; x < bufint; x++)
+                            if (buffer[x] == flag)
+                            {
+                                contador++;
+                                cantB++;
+                                if (contador == 1000)
+                                {
+
+                                    string[] aux = auxs.Split('\t');
+                                    Indice ind = new Indice();
+                                    ind.chr = aux[0];
+                                    ind.PosicionStart = PosicionS;
+                                    Int64 Pose = 0;
+                                    Boolean PoseB=Int64.TryParse(aux[1], out Pose);
+                                    if(PoseB)
+                                        ind.PosicionEnd = Pose;
+                                    ind.start = anterior;
+                                    ind.End = anterior + cantB;
+                                    anterior += cantB;
+                                    indices.Add(ind);
+                                    PosicionS = Pose;
+                                    contador = 0;
+                                    cantB = 0;
+                                    auxs = string.Empty;
+                                }
+                            }
+                            else
+                            {
+                                if (contador == 999)
+                                    auxs += Convert.ToChar(buffer[x]);
+                                if (contador == 998 && (bufint - 1000) < x)
+                                {
+                                    Boolean pasol = true;
+                                    for (int x1 = x; x1 < bufint; x1++)
+                                    {
+                                        if (buffer[x1] == flag)
+                                            pasol = false;
+
+                                    }
+                                    if(pasol)
+                                    {
+                                        auxs += Convert.ToChar(buffer[x]);
+                                    }
+                                }
+                                cantB++;
+                            }
+                    }
+                    
+                    //Console.Write(Convert.ToChar(b));
+                    /*  if (b != 10)
+                      {
+                          if(contador == 999)
+                              auxs += Convert.ToChar(b);
+                          cantB++;
+                      }
+                      else
+                      {
+                          contador++;
+                          cantB++;
+                          if (contador == 1000)
+                          {
+
+                              string[] aux = auxs.Split('\t');
+                              Indice ind = new Indice();
+                              ind.chr = aux[0];
+                              ind.PosicionStart = PosicionS;
+                              ind.PosicionEnd = int.Parse(aux[1]);
+                              ind.start = anterior;
+                              ind.End = anterior + cantB;
+                              anterior += cantB;
+                              indices.Add(ind);
+                              PosicionS = int.Parse(aux[1]);
+                              contador = 0;
+                              cantB = 0;
+                              auxs = string.Empty;
+                          }
+
+
+                      }*/
+                }
+            }
+
+            Console.WriteLine("Terminamos el Sistema File sen {0}", filee.Elapsed);
+            using (Stream stream = File.Open("data1.bin", FileMode.Create))
+            {
+                BinaryFormatter bin = new BinaryFormatter();
+
+                bin.Serialize(stream, indices);
+            }
+            Console.WriteLine("Finalizamos en {0}", filee.Elapsed);
+
             foreach (string linea in File.ReadLines(@"C:\Datos\All_20180418.vcf"))
             {
                 
                 if(contador == 1000)
                 {
-                    ingresarListado(array);
-                    array = new string[1000];
+                    // string[] parametros = array;
+                    // ingresarListado(array);
+                    //var thread = new Thread(
+                    //() => ingresarListado(parametros));
+                    //thread.Start();
+                    //Thread.Sleep(100);
+                    // ingresarListado(array);
+
+                    
+                   char[] charArray = string.Join(string.Empty, array).ToCharArray();
+
+                    //string linea1 = array[chequeoArray(array)];
+
+                    string[] aux = linea.Split('\t');
+                    Indice ind = new Indice();
+                    ind.chr = aux[0];
+                    ind.PosicionStart = PosicionS;
+                    ind.PosicionEnd = int.Parse(aux[1]);
+                    ind.start = anterior;
+                    ind.End = anterior + Buffer.ByteLength(charArray.ToArray());
+                    anterior += Buffer.ByteLength(charArray.ToArray());
+                    indices.Add(ind);
+                    PosicionS = int.Parse(aux[1]);
+                    array = new string[10000];
                     array[0] = linea;
                     contador = 1;
                 }
                 else
                 {
+                    estimador += Encoding.ASCII.GetBytes(linea).Length;
                     array[contador] = linea;
                     contador++;
                 }
-               /* if (contador != 1000)
-                {
-                    
-                }
-                else
-                {
-                    int buffer = 0;
-
-                    Thread MulThread = new Thread(delegate ()
-                    {
-                         ingresarListado(array, linea);
-                    });
-                    //5
-                    MulThread.Start();
-
-                    //Thread t = new Thread(new ParameterizedThreadStart("ingresarListado"));
-                    //t.Start(array,linea);
-                    
-                }*/
+           
             }
             Console.WriteLine("Finalizamos el loop en {0}", filee.Elapsed);
             using (Stream stream = File.Open("data.bin", FileMode.Create))
@@ -313,54 +489,44 @@ namespace pharmahansen
             Console.WriteLine("Comazamos con el metodo Stream");
             filee.Reset();
             filee.Start();
-            using (StreamReader sr = new StreamReader(@"C:\Datos\All_20180418.vcf"))
-            {
-                while(!sr.EndOfStream)
-                {
-                    string linea = sr.ReadLine();
-                    if (contador < 1000)
-                    {
-                        array[contador] = linea;
-                        contador++;
-                    }
-                    else
-                    {
-                        int buffer = 0;
+            /* using (StreamReader sr = new StreamReader(@"C:\Datos\All_20180418.vcf"))
+             {
+                 while(!sr.EndOfStream)
+                 {
+                     string linea = sr.ReadLine();
+                     if (contador < 1000)
+                     {
+                         array[contador] = linea;
+                         contador++;
+                     }
+                     else
+                     {
+                         int buffer = 0;
 
-                        array = new string[1000];
-                        contador = 0;
-                    }
-                }
-            }
+                         array = new string[1000];
+                         contador = 0;
+                     }
+                 }
+             }
 
-            Console.WriteLine("Finalizamos el loop en {0}", filee.Elapsed);
-            using (Stream stream = File.Open("data.bin", FileMode.Create))
-            {
-                BinaryFormatter bin = new BinaryFormatter();
+             Console.WriteLine("Finalizamos el loop en {0}", filee.Elapsed);
+             using (Stream stream = File.Open("data.bin", FileMode.Create))
+             {
+                 BinaryFormatter bin = new BinaryFormatter();
 
-                bin.Serialize(stream, indices);
-            }
-            Console.WriteLine("Finalizamos en {0}", filee.Elapsed);
-
+                 bin.Serialize(stream, indices);
+             }
+             Console.WriteLine("Finalizamos en {0}", filee.Elapsed);
+             */
             Console.WriteLine("nos llevo {0}", stopWatch.Elapsed);
             stopWatch.Stop();
             Console.Read();
         }
-        static void ingresarListado(string[] array)
+        public static void DoWork(object data)
         {
-            var charArray = array.SelectMany(x => x.ToCharArray());
-            string linea = array.Last();
-
-            string[] aux = linea.Split('\t');
-            Indice ind = new Indice();
-            ind.chr = aux[0];
-            ind.PosicionStart = PosicionS;
-            ind.PosicionEnd = int.Parse(aux[1]);
-            ind.start = anterior;
-            ind.End = anterior + Buffer.ByteLength(charArray.ToArray());
-            anterior += Buffer.ByteLength(charArray.ToArray());
-            indices.Add(ind);
-            PosicionS = int.Parse(aux[1]);
+            Console.WriteLine("Static thread procedure. Data='{0}'",
+                data);
         }
+        
     }
 }

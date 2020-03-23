@@ -9,8 +9,8 @@ namespace pharmahansen
     [Serializable]
     class Indice
     {
-        public int PosicionStart { get; set; }
-        public int PosicionEnd { get; set; }
+        public Int64 PosicionStart { get; set; }
+        public Int64 PosicionEnd { get; set; }
         public String chr { get; set; }
         public long start { get; set; }
         public long End { get; set; }

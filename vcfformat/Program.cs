@@ -23,6 +23,7 @@ namespace vcfformat
         static string NombreLog = String.Empty;
         static string vcfFile = String.Empty;
         static string output = String.Empty;
+        static List<String> salida = new List<string>();
         //enumerador de los tipos de mensajes.
         enum Tipo
         {
@@ -115,6 +116,7 @@ namespace vcfformat
         {
             try
             {
+             //   File.AppendText(output).WriteLineAsync(Linea);
                 using (StreamWriter sw = new StreamWriter(output,true))
                 {
                     sw.WriteLine(Linea);
@@ -128,14 +130,19 @@ namespace vcfformat
 
         static void escribirLinea(String Linea,Boolean reemplazo,String ID, String Ref, String Alt )
         {
+
             if (reemplazo)
             {
                 String[] laux = Linea.Split('\t');
                 Linea = laux[0] + "\t" + laux[1] + "\t" + ID +"\t" + Ref +"\t" + Alt + "\t" + laux[5] + "\t" + laux[6] + "\t" + laux[7] + "\t" + laux[8] + "\t" + laux[9];
-                EscribirArchivo(Linea);
+               // EscribirArchivo(Linea);
+                
+                
             }
-            else
-                EscribirArchivo(Linea);
+            salida.Add(Linea);
+           // else
+           //   EscribirArchivo(Linea);
+
         }
 
         static void Main(string[] args)
@@ -194,6 +201,18 @@ namespace vcfformat
                     {
                         String[] lineaaux = line.Split('\t');
                         int posicion;
+
+                        string formateada = string.Empty;
+                        if (lineaaux[5] == "inf")
+                        {
+                            lineaaux[5] = "100";
+                            formateada = line.Replace("inf", "100");
+                        }
+                        else
+                            formateada = line;
+                        
+                        
+
                         bool OK = int.TryParse(lineaaux[1],out posicion);
                         if (!OK)
                         {
@@ -209,123 +228,125 @@ namespace vcfformat
                                     {
                                         if (posicion == 97450065)
                                         {
-                                            escribirLinea(line, true, "rs72549303", "TG", "T");
+                                            escribirLinea(formateada, true, "rs72549303", "TG", "T");
                                             flag = false;
                                         }
                                         if (posicion == 97740414)
                                         {
-                                            escribirLinea(line, true, "rs72549309", "AAGTA", "A");
+                                            escribirLinea(formateada, true, "rs72549309", "AAGTA", "A");
                                             flag = false;
                                         }
                                     }
                                     if (flag)
-                                        escribirLinea(line, false, "", "", "");
+                                        escribirLinea(formateada, false, "", "", "");
                                     break;
                                 case "chr2":
                                     if (lineaaux[9].Split(':')[0] == "0/0")
                                     {
                                         if (posicion == 233760233)
                                         {
-                                            escribirLinea(line, true, ".", "CAT", "CATAT,C,CATATAT");
+                                            escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
                                             flag = false;
                                         }
                                     }
                                     if (flag)
-                                        escribirLinea(line, false, "", "", "");
+                                        escribirLinea(formateada, false, "", "", "");
                                     break;
                                 case "chr7":
                                     if (lineaaux[9].Split(':')[0] == "0/0")
                                     {
                                         if (posicion == 99652770)
                                         {
-                                            escribirLinea(line, true, "rs41303343", "T", "TA");
+                                            escribirLinea(formateada, true, "rs41303343", "T", "TA");
                                             flag = false;
                                         }
                                         if (posicion == 117559589)
                                         {
-                                            escribirLinea(line, true, "rs121908745", "CATC", "C");
+                                            escribirLinea(formateada, true, "rs121908745", "CATC", "C");
                                             flag = false;
                                         }
                                         if (posicion == 117559590)
                                         {
-                                            escribirLinea(line, true, "rs199826652", "ATCT", "A");
+                                            escribirLinea(formateada, true, "rs199826652", "ATCT", "A");
                                             flag = false;
                                         }
                                         if (posicion == 117559591)
                                         {
-                                            escribirLinea(line, true, "rs113993960", "TCTT", "T");
+                                            escribirLinea(formateada, true, "rs113993960", "TCTT", "T");
                                             flag = false;
                                         }
                                         if (posicion == 117592218)
                                         {
-                                            escribirLinea(line, true, "rs121908746", "AA", "A");
+                                            escribirLinea(formateada, true, "rs121908746", "AA", "A");
                                             flag = false;
                                         }
                                         if (posicion == 117627580)
                                         {
-                                            escribirLinea(line, true, "rs121908747", "CC", "C");
+                                            escribirLinea(formateada, true, "rs121908747", "CC", "C");
                                             flag = false;
                                         }
                                     }
                                     if (flag)
-                                        escribirLinea(line, false, "", "", "");
+                                        escribirLinea(formateada, false, "", "", "");
                                     break;
                                 case "chr10":
                                     if (lineaaux[9].Split(':')[0] == "0/0")
                                     {
                                         if (posicion == 94942212)
                                         {
-                                            escribirLinea(line, true, ".", "AAGAAATGGAA", "A");
+                                            escribirLinea(formateada, true, ".", "AAGAAATGGAA", "A");
                                             flag = false;
                                         }
                                         if (posicion == 94949281)
                                         {
-                                            escribirLinea(line, true, "rs9332131", "GA", "G");
+                                            escribirLinea(formateada, true, "rs9332131", "GA", "G");
                                             flag = false;
                                         }
                                     }
                                     if (flag)
-                                        escribirLinea(line, false, "", "", "");
+                                        escribirLinea(formateada, false, "", "", "");
                                     break;
                                 case "chr13":
                                     if (lineaaux[9].Split(':')[0] == "0/0")
                                     {
                                         if (posicion == 48037782)
                                         {
-                                            escribirLinea(line, true, "rs746071566", "AGGAGTC", "A");
+                                            escribirLinea(formateada, true, "rs746071566", "AGGAGTC", "A");
                                             flag = false;
                                         }
                                         if (posicion == 48037801)
                                         {
-                                            escribirLinea(line, true, "rs869320766", "G", "GGAGTCG");
+                                            escribirLinea(formateada, true, "rs869320766", "G", "GGAGTCG");
                                             flag = false;
                                         }
                                         if (posicion == 48037826)
                                         {
-                                            escribirLinea(line, true, "rs777311140", "G", "GCGGG");
+                                            escribirLinea(formateada, true, "rs777311140", "G", "GCGGG");
                                             flag = false;
                                         }
                                         if (posicion == 48040981)
                                         {
-                                            escribirLinea(line, true, "rs1457579126", "AA", "A");
+                                            escribirLinea(formateada, true, "rs1457579126", "AA", "A");
                                             flag = false;
                                         }
                                         if (posicion == 48041103)
                                         {
-                                            escribirLinea(line, true, "rs761191455", "T", "TG");
+                                            escribirLinea(formateada, true, "rs761191455", "T", "TG");
                                             flag = false;
                                         }
                                     }
                                     if (flag)
-                                        escribirLinea(line, false, "", "", "");
+                                        escribirLinea(formateada, false, "", "", "");
                                     break;
                                 default:
-                                    escribirLinea(line, false, "", "", "");
+                                    escribirLinea(formateada, false, "", "", "");
                                     break;
                             }
                         }
                     }
                 }
+                File.AppendAllLines(output, salida);
+                
                 EscribirLog("Finalizamos el formateo. Esta listo para usar en el Pharmcat.", Tipo.Informativo, false);
                 System.Environment.Exit(ERROR_INVALID_COMMAND_LINE);
             }
@@ -334,6 +355,7 @@ namespace vcfformat
                 EscribirLog("Por favor indique el vcf a formatear", Tipo.Alerta, false);
                 System.Environment.Exit(ERROR_INVALID_COMMAND_LINE);
             }
+            
         }
     }
 }
