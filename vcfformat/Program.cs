@@ -249,26 +249,51 @@ namespace vcfformat
                                     if (posicion == 233760233)
                                     {
                                         string[] genotipado = lineaaux[9].Split(':');
-                                        if(genotipado[0] == "1/1")
+                                        if (genotipado[0] == "0/0")
                                         {
-                                            if(lineaaux[3] == "CAT" && lineaaux[4] == "C")
+                                            escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                            flag = false;
+                                        }
+
+                                        if (genotipado[0] == "1/1")
+                                        {
+
+                                            if (lineaaux[3] == "C" && lineaaux[4] == "CAT")
+                                            {
+                                                escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                                flag = false;
+                                            }
+                                            if (lineaaux[3] == "CAT" && lineaaux[4] == "C")
                                             {
                                                 formateada.Replace("1/1", "2/2");
+                                                escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                                flag = false;
                                             }
                                             if (lineaaux[3] == "C" && lineaaux[4] == "CATAT")
                                             {
                                                 formateada.Replace("1/1", "3/3");
+                                                escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                                flag = false;
                                             }
                                         }
                                         if (genotipado[0] == "0/1")
                                         {
+                                            if (lineaaux[3] == "C" && lineaaux[4] == "CAT")
+                                            {
+                                                escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                                flag = false;
+                                            }
                                             if (lineaaux[3] == "CAT" && lineaaux[4] == "C")
                                             {
                                                 formateada.Replace("0/1", "0/2");
+                                                escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                                flag = false;
                                             }
                                             if (lineaaux[3] == "C" && lineaaux[4] == "CATAT")
                                             {
                                                 formateada.Replace("0/1", "0/3");
+                                                escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                                flag = false;
                                             }
                                         }
                                         if (genotipado[0] == "1/2")
@@ -276,14 +301,23 @@ namespace vcfformat
                                             if (lineaaux[3] == "C" && lineaaux[4] == "CAT,CATAT")
                                             {
                                                 formateada.Replace("1/2", "1/3");
+                                                escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                                flag = false;
                                             }
                                             if (lineaaux[3] == "CAT" && lineaaux[4] == "C,CATATAT")
                                             {
                                                 formateada.Replace("1/2", "2/3");
+                                                escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                                flag = false;
+                                            }
+                                            if (lineaaux[3] == "CAT" && lineaaux[4] == "C,CATAT")
+                                            {
+                                                escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                                flag = false;
                                             }
                                         }
-                                        escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
-                                        flag = false;
+                                        
+                                        
                                     }
                                     
                                     if (flag)
