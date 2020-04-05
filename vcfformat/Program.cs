@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.IO.Compression;
 
 namespace vcfformat
 {
@@ -147,7 +148,10 @@ namespace vcfformat
 
         static void Main(string[] args)
         {
-            if(args.Length>0)
+
+          
+
+            if (args.Length>0)
             {
                 if (chequeoArgunto("-log", false, args))
                     NombreLog = traerArgumento("-log", args);
@@ -188,6 +192,7 @@ namespace vcfformat
                     EscribirLog("Existe el archivo " + output + " se procedera a reemplazarlo.", Tipo.Alerta, false);
                     File.Delete(output);
                 }
+               
 
                 String[] Lines = File.ReadAllLines(vcfFile);
                 foreach(string line in Lines)
@@ -241,14 +246,46 @@ namespace vcfformat
                                         escribirLinea(formateada, false, "", "", "");
                                     break;
                                 case "chr2":
-                                    if (lineaaux[9].Split(':')[0] == "0/0")
+                                    if (posicion == 233760233)
                                     {
-                                        if (posicion == 233760233)
+                                        string[] genotipado = lineaaux[9].Split(':');
+                                        if(genotipado[0] == "1/1")
                                         {
-                                            escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
-                                            flag = false;
+                                            if(lineaaux[3] == "CAT" && lineaaux[4] == "C")
+                                            {
+                                                formateada.Replace("1/1", "2/2");
+                                            }
+                                            if (lineaaux[3] == "C" && lineaaux[4] == "CATAT")
+                                            {
+                                                formateada.Replace("1/1", "3/3");
+                                            }
                                         }
+                                        if (genotipado[0] == "0/1")
+                                        {
+                                            if (lineaaux[3] == "CAT" && lineaaux[4] == "C")
+                                            {
+                                                formateada.Replace("0/1", "0/2");
+                                            }
+                                            if (lineaaux[3] == "C" && lineaaux[4] == "CATAT")
+                                            {
+                                                formateada.Replace("0/1", "0/3");
+                                            }
+                                        }
+                                        if (genotipado[0] == "1/2")
+                                        {
+                                            if (lineaaux[3] == "C" && lineaaux[4] == "CAT,CATAT")
+                                            {
+                                                formateada.Replace("1/2", "1/3");
+                                            }
+                                            if (lineaaux[3] == "CAT" && lineaaux[4] == "C,CATATAT")
+                                            {
+                                                formateada.Replace("1/2", "2/3");
+                                            }
+                                        }
+                                        escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                        flag = false;
                                     }
+                                    
                                     if (flag)
                                         escribirLinea(formateada, false, "", "", "");
                                     break;
@@ -346,7 +383,13 @@ namespace vcfformat
                     }
                 }
                 File.AppendAllLines(output, salida);
-                
+                byte[] dataAsBytes = salida
+                                      .SelectMany(s => System.Text.Encoding.ASCII.GetBytes(s))
+                                      .ToArray();
+                using (FileStream fs = new FileStream(output + ".gz", FileMode.OpenOrCreate, FileAccess.Write))
+                using (GZipStream compress = new GZipStream(fs, CompressionLevel.Optimal))
+                    compress.Write(dataAsBytes, 0, dataAsBytes.Length);
+
                 EscribirLog("Finalizamos el formateo. Esta listo para usar en el Pharmcat.", Tipo.Informativo, false);
                 System.Environment.Exit(ERROR_INVALID_COMMAND_LINE);
             }
