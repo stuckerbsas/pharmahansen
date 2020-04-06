@@ -146,6 +146,25 @@ namespace vcfformat
 
         }
 
+        static string formateoLinea(String[] Linea, String Genotipo)
+        {
+            
+            string  formateada = Linea[0];
+            string[] genotipado = Linea[9].Split(':');
+            for (int x = 1; x < Linea.Length; x++)
+            {
+                if (x == 9)
+                {
+                    formateada += "\t" + Genotipo;
+                    for (int x1 = 1; x1 < genotipado.Length; x1++)
+                        formateada += ":" + genotipado[x1];
+                }
+                else
+                    formateada += "\t" + Linea[x];
+
+            }
+            return formateada;
+        }
         static void Main(string[] args)
         {
 
@@ -265,14 +284,14 @@ namespace vcfformat
                                             }
                                             if (lineaaux[3] == "CAT" && lineaaux[4] == "C")
                                             {
-                                                formateada.Replace("1/1", "2/2");
-                                                escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                               
+                                            //formateada.Replace("1/1", "2/2");
+                                                escribirLinea(formateoLinea(lineaaux, "2/2"), true, ".", "CAT", "CATAT,C,CATATAT");
                                                 flag = false;
                                             }
                                             if (lineaaux[3] == "C" && lineaaux[4] == "CATAT")
                                             {
-                                                formateada.Replace("1/1", "3/3");
-                                                escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                                 escribirLinea(formateoLinea(lineaaux, "3/3"), true, ".", "CAT", "CATAT,C,CATATAT");
                                                 flag = false;
                                             }
                                         }
@@ -285,14 +304,12 @@ namespace vcfformat
                                             }
                                             if (lineaaux[3] == "CAT" && lineaaux[4] == "C")
                                             {
-                                                formateada.Replace("0/1", "0/2");
-                                                escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                                escribirLinea(formateoLinea(lineaaux, "0/2"), true, ".", "CAT", "CATAT,C,CATATAT");
                                                 flag = false;
                                             }
                                             if (lineaaux[3] == "C" && lineaaux[4] == "CATAT")
                                             {
-                                                formateada.Replace("0/1", "0/3");
-                                                escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                                escribirLinea(formateoLinea(lineaaux, "0/3"), true, ".", "CAT", "CATAT,C,CATATAT");
                                                 flag = false;
                                             }
                                         }
@@ -300,14 +317,12 @@ namespace vcfformat
                                         {
                                             if (lineaaux[3] == "C" && (lineaaux[4] == "CAT,CATAT" || lineaaux[4] == "CATAT,CAT"))
                                             {
-                                                formateada.Replace("1/2", "1/3");
-                                                escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                                escribirLinea(formateoLinea(lineaaux, "1/3"), true, ".", "CAT", "CATAT,C,CATATAT");
                                                 flag = false;
                                             }
-                                            if (lineaaux[3] == "CAT" && (lineaaux[4] == "C,CATATAT" || lineaaux[4] == "CATATAT,C"))
+                                            if (lineaaux[3] == "CAT" && (lineaaux[4] == "C,CATATAT" || lineaaux[4] == "CATATAT,C,"))
                                             {
-                                                formateada.Replace("1/2", "2/3");
-                                                escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
+                                                escribirLinea(formateoLinea(lineaaux, "2/3"), true, ".", "CAT", "CATAT,C,CATATAT");
                                                 flag = false;
                                             }
                                             if (lineaaux[3] == "CAT" && (lineaaux[4] == "C,CATAT"|| lineaaux[4] == "CATAT,C"))
