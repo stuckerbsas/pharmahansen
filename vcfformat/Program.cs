@@ -298,19 +298,19 @@ namespace vcfformat
                                         }
                                         if (genotipado[0] == "1/2")
                                         {
-                                            if (lineaaux[3] == "C" && lineaaux[4] == "CAT,CATAT")
+                                            if (lineaaux[3] == "C" && (lineaaux[4] == "CAT,CATAT" || lineaaux[4] == "CATAT,CAT"))
                                             {
                                                 formateada.Replace("1/2", "1/3");
                                                 escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
                                                 flag = false;
                                             }
-                                            if (lineaaux[3] == "CAT" && lineaaux[4] == "C,CATATAT")
+                                            if (lineaaux[3] == "CAT" && (lineaaux[4] == "C,CATATAT" || lineaaux[4] == "CATATAT,C"))
                                             {
                                                 formateada.Replace("1/2", "2/3");
                                                 escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
                                                 flag = false;
                                             }
-                                            if (lineaaux[3] == "CAT" && lineaaux[4] == "C,CATAT")
+                                            if (lineaaux[3] == "CAT" && (lineaaux[4] == "C,CATAT"|| lineaaux[4] == "CATAT,C"))
                                             {
                                                 escribirLinea(formateada, true, ".", "CAT", "CATAT,C,CATATAT");
                                                 flag = false;
